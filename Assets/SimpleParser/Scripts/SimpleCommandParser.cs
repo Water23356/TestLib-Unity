@@ -182,7 +182,14 @@ namespace CommandParser
                             #endregion
                             break;
                         case '\\'://开启转义
-                            trans = true;
+                            if(instruct > 0)
+                            {
+                                temp.Append(c);   
+                            }
+                            else
+                            {
+                                trans = true;
+                            }
                             break;
                         case '['://指令头
                             if (quote > 0)

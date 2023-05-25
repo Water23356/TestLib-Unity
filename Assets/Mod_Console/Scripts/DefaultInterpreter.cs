@@ -1,7 +1,9 @@
 ﻿using CommandParser;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -10,6 +12,98 @@ namespace Mod_Console
 {
     public class DefaultInterpreter : Interpreter
     {
+        public static void Print(string txt,bool newline = true)
+        {
+            ConsolePanel.Instance.Print(txt, newline);
+        }
+        public static void PrintError(string txt, bool newline = true)
+        {
+            ConsolePanel.Instance.PrintError(txt, newline);
+        }
+
+        #region 指令函数
+        protected Data CMD_clear()
+        {
+            ConsolePanel.Instance.Clear();
+            return Data.Empty;
+        }
+        protected Data CMD_Erinbone()
+        {
+            Print("This is the author Erinbone. This version is currently in the testing phase. Welcome to participate in the testing and report errors to us");
+            return Data.Empty;
+        }
+        protected Data CMD_exit()
+        {
+            Application.Quit();
+            return Data.Empty;
+        }
+        protected Data CMD_help(Data[] parameters)
+        {
+            Print("----------help----------");
+            Print("This is the help page, you can use help [page] to switch the current page of the help page");
+            int page = 1;
+            if (parameters.Length == 0)
+            {
+
+            }
+            else if (parameters[0].Type == DataType.Integer)
+            {
+                page = (int)parameters[0].Value;
+                if (page < 1 || page > 2)
+                {
+                    PrintError("The specified help page does not exist: Page[1-1]");
+                    page = 1;
+                }
+            }
+            else
+            {
+                return Data.Error;
+            }
+            switch (page)
+            {
+                case 1:
+                    Print("clear      *clear console message");
+                    Print("help [page]     *get help");
+                    break;
+                case 2:
+                    Print("Oh! Construction is underway here");
+                    break;
+            }
+            Print($"-----------[{page}/1]-----------");
+            Print("----------help----------");
+            return Data.Empty;
+        }
+        protected Data CMD_print(Data[] parameters)
+        {
+            Data txt = parameters.Get(0);
+            if(txt.isError())
+            {
+                return Data.Error;
+            }
+            string text = txt.Value.ToString();
+            Print(text);
+            return new Data(text, DataType.Text);
+        }
+        protected Data CMD_openfile(Data[] parameters)
+        {
+            Data path = parameters.Get(0);
+            if(path.isError())//数据错误或者文件不存在时返回错误
+            {
+                PrintError("Path parameter error");
+                return Data.Error;
+            }
+            string pt = path.Value.ToString();
+            if(File.Exists(pt))
+            {
+                string txt = File.ReadAllText(pt);
+                return new Data(txt, DataType.Text);
+            }
+            PrintError($"The file path does not exist:{pt}");
+            return Data.Error;
+            
+        }
+        #endregion
+
         public override Data Effectuate(string commandName, Data[] parameters)
         {
             Data data = EffectuateSuper(commandName, parameters);
@@ -18,50 +112,19 @@ namespace Mod_Console
                 switch (commandName)
                 {
                     case "clear":
-                        ConsolePanel.Instance.Clear();
-                        return Data.Empty;
+                        return CMD_clear();
                     case "Erinbone":
-                        ConsolePanel.Instance.Print("This is the author Erinbone. This version is currently in the testing phase. Welcome to participate in the testing and report errors to us");
-                        return Data.Empty;
+                        return CMD_Erinbone();
                     case "exit":
-                        Application.Quit();
-                        return Data.Empty;
+                        return CMD_exit();
                     case "help":
-                        ConsolePanel.Instance.Print("----------help----------");
-                        ConsolePanel.Instance.Print("This is the help page, you can use help [page] to switch the current page of the help page");
-                        int page = 1;
-                        if(parameters.Length == 0)
-                        {
-
-                        }
-                        else if (parameters[0].Type == DataType.Integer)
-                        {
-                            page = (int)parameters[0].Value;
-                            if(page < 1 || page > 2)
-                            {
-                                ConsolePanel.Instance.PrintError("The specified help page does not exist: Page[1-1]");
-                                page = 1;
-                            }
-                        }
-                        else
-                        {
-                            return data;
-                        }
-                        switch(page)
-                        {
-                            case 1:
-                                ConsolePanel.Instance.Print("clear      *clear console message");
-                                ConsolePanel.Instance.Print("help [page]     *get help");
-                                break;
-                            case 2:
-                                ConsolePanel.Instance.Print("Oh! Construction is underway here");
-                                break;
-                        }
-                        ConsolePanel.Instance.Print($"-----------[{page}/1]-----------");
-                        ConsolePanel.Instance.Print("----------help----------");
-                        return Data.Empty;
+                        return CMD_help(parameters);
+                    case "print":
+                        return CMD_print(parameters);
+                    case "openfile":
+                        return CMD_openfile(parameters);
                     default:
-                        return data;
+                        return Data.Error;
                 }
             }
             return data;

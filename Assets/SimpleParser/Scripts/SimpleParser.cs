@@ -390,6 +390,20 @@ namespace CommandParser
             illustration[key] = value;
             return true;
         }
+        /// <summary>
+        /// 安全的获取数组的值
+        /// </summary>
+        /// <param name="datas"></param>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public static Data Get(this Data[] datas,int index)
+        {
+            if(index<0||index>=datas.Length)
+            {
+                return Data.Error;
+            }
+            return datas[index];
+        }
     }
 
 }
