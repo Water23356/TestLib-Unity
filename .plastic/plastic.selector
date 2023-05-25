@@ -1,0 +1,4 @@
+repository "TestLib@id_loser@cloud.cn"
+  path "/"
+    br "/main"
+    co "/main"
