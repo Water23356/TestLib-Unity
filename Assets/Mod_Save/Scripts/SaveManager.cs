@@ -5,8 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
-using Newtonsoft;
-using Newtonsoft.Json;
 
 namespace Mod_Save
 {
@@ -63,6 +61,12 @@ namespace Mod_Save
     {
         private List<ISavable> savableObjects = new List<ISavable>();
         /// <summary>
+        /// 存档文件夹路径
+        /// </summary>
+        public string savePath;
+
+
+        /// <summary>
         /// 注册存档片段
         /// </summary>
         /// <param name="savableObject"></param>
@@ -78,11 +82,6 @@ namespace Mod_Save
         {
             savableObjects.Remove(savableObject);
         }
-        /// <summary>
-        /// 存档文件夹路径
-        /// </summary>
-        public string savePath;
-
 
         /// <summary>
         /// 存储对象
@@ -96,7 +95,7 @@ namespace Mod_Save
             {
                 saveData.Add(savableObject.GetSaveEntry());
             }
-            File.WriteAllText(Path.Combine(savePath, fileName), JsonConvert.SerializeObject(saveData));
+            //File.WriteAllText(Path.Combine(savePath, fileName), JsonConvert.SerializeObject(saveData));
         }
 
         /// <summary>
@@ -105,16 +104,17 @@ namespace Mod_Save
         /// <param name="fileName">存档文件名</param>
         public void RestoreObjects(string fileName)
         {
-            SaveData saveData = JsonConvert.DeserializeObject<SaveData>(File.ReadAllText(Path.Combine(savePath, fileName)));
-            // 遍历存储对象列表，将标记为需要还原的对象进行还原操作
-            foreach (ISavable savableObject in savableObjects)
-            {
-                SaveEntry saveEntry = saveData.TryGet(savableObject.Identifier);
-                if(saveEntry!=null)
-                {
-                    savableObject.Restore(saveEntry);
-                }
-            }
+
+            //SaveData saveData = JsonConvert.DeserializeObject<SaveData>(File.ReadAllText(Path.Combine(savePath, fileName)));
+            //// 遍历存储对象列表，将标记为需要还原的对象进行还原操作
+            //foreach (ISavable savableObject in savableObjects)
+            //{
+            //    SaveEntry saveEntry = saveData.TryGet(savableObject.Identifier);
+            //    if(saveEntry!=null)
+            //    {
+            //        savableObject.Restore(saveEntry);
+            //    }
+            //}
         }
     }
 }

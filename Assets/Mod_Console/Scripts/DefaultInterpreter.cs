@@ -1,11 +1,7 @@
-﻿using CommandParser;
-using System;
-using System.Collections.Generic;
+﻿// Ignore Spelling: openfile
+
+using ER.Parser;
 using System.IO;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Mod_Console
@@ -75,7 +71,7 @@ namespace Mod_Console
         }
         protected Data CMD_print(Data[] parameters)
         {
-            Data txt = parameters.Get(0);
+            Data txt = parameters[0];
             if(txt.isError())
             {
                 return Data.Error;
@@ -86,7 +82,7 @@ namespace Mod_Console
         }
         protected Data CMD_openfile(Data[] parameters)
         {
-            Data path = parameters.Get(0);
+            Data path = parameters[0];
             if(path.isError())//数据错误或者文件不存在时返回错误
             {
                 PrintError("Path parameter error");

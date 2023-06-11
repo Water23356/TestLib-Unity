@@ -1,12 +1,9 @@
-﻿using CommandParser;
+﻿using ER.Parser;
 using Mod_Console;
-using System.Collections;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Text;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class ConsolePanel : MonoBehaviour
 {

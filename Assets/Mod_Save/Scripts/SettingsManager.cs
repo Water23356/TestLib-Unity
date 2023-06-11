@@ -18,6 +18,7 @@ namespace Mod_Save
         {
             if (Instance == null) { Instance = this; }
             else { Destroy(this); }
+            settingsPath = Application.persistentDataPath + "";
         }
         #endregion
         /// <summary>

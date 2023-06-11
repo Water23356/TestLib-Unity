@@ -8,7 +8,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CommandParser
+namespace ER.Parser
 {
     /// <summary>
     /// 简单的指令解释器
