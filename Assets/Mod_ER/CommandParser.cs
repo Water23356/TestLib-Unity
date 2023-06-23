@@ -13,7 +13,7 @@ namespace ER.Parser
     /// <summary>
     /// 简单的指令解释器
     /// </summary>
-    public class SimpleCommandParser
+    public class CommandParser
     {
         /// <summary>
         /// 消息输出接口

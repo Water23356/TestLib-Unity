@@ -85,7 +85,7 @@ public class ConsolePanel : MonoBehaviour
     /// <returns>是否是一个有效指令</returns>
     public bool Command(string commandText)
     {
-        if (SimpleCommandParser.Parse(commandText, interpreter).isError())
+        if (CommandParser.Parse(commandText, interpreter).isError())
         {
             return false;
         }

@@ -12,14 +12,15 @@ namespace ER.Items
     {
         #region 物品属性
         /// <summary>
-        /// 物品名称
+        /// 物品名称(系统内部的物品名称，和玩家所见的名称文本不同，不计入物品的拓展属性)
         /// </summary>
-        public string Name { get; set; }
+        public string Name { get; protected set; }
         /// <summary>
-        /// 物品ID
+        /// 物品ID（系统内部的物品ID，不计入物品的拓展属性）
         /// </summary>
-        public int ID { get; set; }
+        public int ID { get; protected set; }
 
+        #region 物品的拓展属性
         /// <summary>
         /// 文本属性（键名：文本所在的标识头）
         /// </summary>
@@ -36,6 +37,7 @@ namespace ER.Items
         /// 布尔属性
         /// </summary>
         protected Dictionary<string,bool> attributeBool = new Dictionary<string,bool>();
+        #endregion
         #endregion
 
         #region 尝试获取属性
@@ -58,9 +60,16 @@ namespace ER.Items
         #endregion
 
         #region 创建属性
-        public void CreatAttribute(string key,int value)
+        public void CreatAttribute(string key, int value)
         {
-            attributeInt[key] = value;
+            if (key == "IDLabel")
+            {
+                ID = value;
+            }
+            else
+            {
+                attributeInt[key] = value;
+            }
         }
         public void CreatAttribute(string key, float value)
         {
@@ -68,7 +77,14 @@ namespace ER.Items
         }
         public void CreatAttribute(string key, string value)
         {
-            attributeText[key] = value;
+            if(key == "NameLabel")
+            {
+                Name = value;
+            }
+            else
+            {
+                attributeText[key] = value;
+            }
         }
         public void CreatAttribute(string key, bool value)
         {
